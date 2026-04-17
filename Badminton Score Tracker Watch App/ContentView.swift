@@ -8,14 +8,22 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var match: MatchState?
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        Group {
+            if let match {
+                if match.gameStatus == .inProgress {
+                    ScoringView(match: match)
+                } else {
+                    GameOverView(match: match, onNewGame: { self.match = nil })
+                }
+            } else {
+                PreGameView { firstServer in
+                    match = MatchState(firstServer: firstServer)
+                }
+            }
         }
-        .padding()
     }
 }
 
